@@ -1,0 +1,139 @@
+﻿@{
+	ViewData["Title"] = "Generate";
+}
+
+
+<div class="text-center">
+	<h1 class="display-4">Generate</h1>
+	<div class="container">
+		<table id="generate" class="table table-bordered table-striped table-hover text-center">
+			<thead>
+				<tr>
+					<th class="text-center">No</th>
+					<th class="text-center">Nama</th>
+					<th class="text-center">Gender </th>
+					<th class="text-center">Hobi </th>
+					<th class="text-center">Umur  </th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+		<div class="flex-row">
+			<button class="btn btn-info btn-sm" id="generateButton"><i class="fas fa-sync"></i> Generate</button>
+			<button class="btn btn-success btn-sm" id="saveButton" disabled><i class="fas fa-save"></i> Submit</button>
+		</div>
+	</div>
+</div>
+
+@section scripts {
+	<script>
+		$(document).ready(function () {
+			var dataTable = $('#generate').DataTable({
+				searching: false,
+				paging: false,
+				info: false
+			});
+
+			$("#generateButton").click(function () {
+				generateRandomStrings();
+				$("#saveButton").removeAttr("disabled");
+			});
+
+			$("#saveButton").click(function () {
+				saveDataToDatabase();
+			});
+		});
+
+		function generateRandomStrings() {
+			$("#generate tbody").empty();
+
+			var rowCount = 1000;
+
+			for (var i = 1; i <= rowCount; i++) {
+				var randomString = generateRandomString();
+				var randomGender = generateRandomGender();
+				var randomHobi = generateRandomHobi();
+				var randomUmur = generateRandomUmur();
+				$("#generate tbody").append("<tr><td>" + i + "</td><td>" + randomString + "</td><td>" + randomGender + "</td><td>" + randomHobi + "</td><td>" + randomUmur + "</td></tr>");
+			}
+		}
+
+		function generateRandomString() {
+			var length = 8;
+			var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+			var result = "";
+
+			for (var i = 0; i < length; i++) {
+				result += characters.charAt(Math.floor(Math.random() * characters.length));
+			}
+
+			return result;
+		}
+		function generateRandomGender() {
+			return Math.floor(Math.random() * 2) + 1;
+		}
+
+		function generateRandomHobi() {
+			var hobbies = ['A', 'B', 'C', 'D', 'E'];
+			var randomIndex = Math.floor(Math.random() * hobbies.length);
+			return hobbies[randomIndex];
+		}
+
+		function generateRandomUmur() {
+			return Math.floor(Math.random() * (40 - 18 + 1)) + 18;
+		}
+
+		function saveDataToDatabase() {
+			var data = [];
+
+			$('#generate tbody tr').each(function () {
+				var row = $(this);
+				var nama = row.find('td:eq(1)').text();
+				var idGender = row.find('td:eq(2)').text();
+				var idHobi = row.find('td:eq(3)').text();
+				var umur = row.find('td:eq(4)').text();
+
+				data.push({
+					Nama: nama,
+					IdGender: parseInt(idGender),
+					IdHobi: idHobi,
+					Umur: parseInt(umur)
+				});
+			});
+
+			 console.log(data);
+
+			$.ajax({
+				type: 'POST',
+				url: '@Url.Action("Create", "Generate")',
+				contentType: 'application/json',
+				data: JSON.stringify(data),
+				dataType: 'json',
+				success: function (result) {
+					if (result.success) {
+						Swal.fire({
+							icon: 'success',
+							title: 'Success!',
+							text: result.message,
+						});
+						$("#generate tbody").empty();
+					} else {
+						Swal.fire({
+							icon: 'error',
+							title: 'Error!',
+							text: result.message,
+						});
+					}
+				},
+				error: function (error) {
+					Swal.fire({
+						icon: 'error',
+						title: 'Error!',
+						text: 'Error: ' + error.responseText,
+					});
+				}
+			});
+		}
+	</script>
+}

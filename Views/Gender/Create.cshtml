@@ -1,0 +1,30 @@
+﻿@{
+	ViewData["Title"] = "Add Gender";
+}
+
+@model Adaya.Models.Gender
+<div class="text-center">
+	<h1 class="display-4">Add Gender</h1>
+	<div class="container">
+		<div class="text-end">
+			<a asp-controller="Gender" asp-action="Index" class="btn btn-warning"><i class="fas fa-undo"></i> Back to List</a>
+		</div>
+		<form asp-controller="Gender" asp-action="Create" method="post">
+			<div class="col-md-10">
+				<div class="mb-3">
+					<div class="form-group">
+						<label asp-for="Nama" class="control-label"></label>
+						<input asp-for="Nama" class="form-control" />
+						<span asp-validation-for="Nama" class="text-danger"></span>
+					</div>
+				</div>
+				<div class="mb-3">
+					<div class="form-group">
+						<button type="reset" class="btn btn-secondary"><i class="fa-solid fa-rotate"></i> Reset</button>
+						<button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

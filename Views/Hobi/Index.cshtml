@@ -1,0 +1,99 @@
+﻿@{
+	ViewData["Title"] = "Hobi";
+}
+<div class="text-center">
+	<h1 class="display-4">Hobi</h1>
+	<div class="container">
+		<div class="text-end">
+			<a class="btn btn-primary" asp-area="" asp-controller="Hobi" asp-action="Create"><i class="fas fa-plus"></i> Add Hobi</a>
+		</div>
+		<table id="hobi" class="table table-bordered table-striped table-hover">
+			<thead>
+				<tr>
+					<th class="text-center">No</th>
+					<th class="text-center">Nama</th>
+					<th class="text-center">Aksi</th>
+				</tr>
+			</thead>
+			<tbody>
+				@{
+					var counter = 1;
+				}
+				@foreach (var hobi in Model)
+				{
+					<tr>
+						<td>@counter</td>
+						<td>@hobi.Nama</td>
+						<td>
+							<a asp-controller="Hobi" asp-action="Edit" asp-route-id="@hobi.Id" class="btn btn-info"><i class="fas fa-edit"></i> Edit</a>
+							<form id="deleteForm_@hobi.Id" asp-controller="Hobi" asp-action="Delete" method="post" style="display: inline;">
+								<input type="hidden" name="id" value="@hobi.Id" />
+								<button type="button" class="btn btn-danger" onclick="confirmDelete('@hobi.Id')">
+									<i class="fas fa-trash-alt"></i> Delete
+								</button>
+							</form>
+						</td>
+					</tr>
+					counter++;
+				}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+@section scripts {
+
+	<script>
+		$(document).ready(function () {
+			var dataTable = $('#hobi').DataTable({
+			});
+		});
+		document.addEventListener('DOMContentLoaded', function () {
+			var sweetAlertMessage = '@TempData["SweetAlertMessage"]';
+
+			if (sweetAlertMessage) {
+				Swal.fire({
+					icon: 'success',
+					title: 'Success!',
+					text: sweetAlertMessage,
+				});
+			}
+
+			var sweetAlertMessageEdit = '@TempData["SweetAlertMessageEdit"]';
+
+			if (sweetAlertMessageEdit) {
+				Swal.fire({
+					icon: 'info',
+					title: 'Success!',
+					text: sweetAlertMessageEdit,
+				});
+			}
+
+			var SweetAlertMessageDelete = '@TempData["SweetAlertMessageDelete"]';
+
+			if (SweetAlertMessageDelete) {
+				Swal.fire({
+					icon: 'error',
+					title: 'Success!',
+					text: SweetAlertMessageDelete,
+				});
+			}
+		});
+
+		function confirmDelete(id) {
+			Swal.fire({
+				title: 'Are you sure?',
+				text: 'You won\'t be able to revert this!',
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#d33',
+				cancelButtonColor: '#3085d6',
+				confirmButtonText: 'Yes, delete it!'
+			}).then((result) => {
+				if (result.isConfirmed) {
+					document.getElementById('deleteForm_' + id).submit();
+				}
+			});
+		}
+	</script>
+}

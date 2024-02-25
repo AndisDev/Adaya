@@ -1,0 +1,30 @@
+﻿@{
+	ViewData["Title"] = "Edit Hobi";
+}
+
+@model Adaya.Models.Hobi
+<div class="text-center">
+	<h1 class="display-4">Edit Hobi</h1>
+	<div class="container">
+		<div class="text-end">
+			<a asp-controller="Hobi" asp-action="Index" class="btn btn-warning"><i class="fas fa-undo"></i> Back to List</a>
+		</div>
+		<form asp-controller="Hobi" asp-action="Edit" method="post">
+			<div class="col-md-10">
+				<div class="mb-3">
+					<div class="form-group">
+						<label asp-for="Nama" class="control-label"></label>
+						<input asp-for="Nama" class="form-control" />
+						<span asp-validation-for="Nama" class="text-danger"></span>
+					</div>
+				</div>
+				<div class="mb-3">
+					<div class="form-group">
+						<button type="reset" class="btn btn-secondary"><i class="fa-solid fa-rotate"></i> Reset</button>
+						<button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

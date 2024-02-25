@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<div class="text-center">
+	<h1 class="display-4">Home</h1>
+	<div class="container">
+		<table id="personal" class="table table-bordered table-striped table-hover">
+			<thead>
+				<tr>
+					<th class="text-center">No</th>
+					<th class="text-center">Nama</th>
+					<th class="text-center">Gender</th>
+					<th class="text-center">Hobi</th>
+					<th class="text-center">Umur</th>
+				</tr>
+			</thead>
+			<tbody>
+				@{
+					var counter = 1;
+				}
+				@foreach (var personal in Model)
+				{
+					<tr>
+						<td>@counter</td>
+						<td>@personal.Nama</td>
+						<td>@personal.Gender</td>
+						<td>@personal.Hobi</td>
+						<td>@personal.Umur</td>
+					</tr>
+					counter++;
+				}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+@section scripts {
+
+	<script>
+		$(document).ready(function () {
+			var dataTable = $('#personal').DataTable({
+			});
+		});
+	</script>
+}

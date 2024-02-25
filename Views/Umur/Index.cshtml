@@ -1,0 +1,42 @@
+﻿@{
+	ViewData["Title"] = "Umur";
+}
+
+<div class="text-center">
+	<h1 class="display-4">Umur</h1>
+	<div class="container">
+		<table id="umur" class="table table-bordered table-striped table-hover">
+			<thead>
+				<tr>
+					<th class="text-center">No</th>
+					<th class="text-center">Umur</th>
+					<th class="text-center">Total</th>
+				</tr>
+			</thead>
+			<tbody>
+				@{
+					var counter = 1;
+				}
+				@foreach (var umur in Model)
+				{
+					<tr>
+						<td>@counter</td>
+						<td>@umur.Umur</td>
+						<td>@umur.Total</td>
+					</tr>
+					counter++;
+				}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+@section scripts {
+
+	<script>
+		$(document).ready(function () {
+			var dataTable = $('#umur').DataTable({
+			});
+		});
+	</script>
+}
