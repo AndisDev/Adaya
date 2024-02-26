@@ -33,21 +33,29 @@ namespace Adaya.Controllers
 				dataTable.Columns.Add("IdHobi", typeof(char));
 				dataTable.Columns.Add("Umur", typeof(int));
 
-				foreach (var data in personalData)
+				if (personalData == null || !personalData.Any())
 				{
-					dataTable.Rows.Add(data.Nama, data.IdGender, data.IdHobi, data.Umur);
+					return Json(new { success = false, message = "Generate Data Terlebih Dahulu" });
 				}
 
-				var dataTableParameter = new SqlParameter("@PersonalData", SqlDbType.Structured)
-				{
-					TypeName = "dbo.PersonalTableType",
-					Value = dataTable
-				};
+				foreach (var data in personalData)
+					{
+						dataTable.Rows.Add(data.Nama, data.IdGender, data.IdHobi, data.Umur);
+					}
 
-				_context.Database.ExecuteSqlRaw("EXEC dbo.InsertBulkPersonalData @PersonalData", dataTableParameter);
-				_context.Database.ExecuteSqlRaw("EXEC dbo.InsertUmurTotals");
+					var dataTableParameter = new SqlParameter("@PersonalData", SqlDbType.Structured)
+					{
+						TypeName = "dbo.PersonalTableType",
+						Value = dataTable
+					};
 
-				return Json(new { success = true, message = "Data inserted successfully!" });
+					_context.Database.ExecuteSqlRaw("EXEC dbo.InsertBulkPersonalData @PersonalData", dataTableParameter);
+					_context.Database.ExecuteSqlRaw("EXEC dbo.InsertUmurTotals");
+
+					return Json(new { success = true, message = "Data inserted successfully!" });
+				
+
+				
 			}
 			catch (Exception ex)
 			{
